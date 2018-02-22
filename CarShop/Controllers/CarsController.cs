@@ -15,17 +15,23 @@ namespace CarShop.Controllers
     public class CarsController : Controller
     {
         private readonly ICarRepository _carRepository;
+        private readonly ICarLogic _carLogic;
 
-        public CarsController(ICarRepository carRepository)
+        public CarsController(ICarRepository carRepository, ICarLogic carLogic)
         {
             _carRepository = carRepository;
+            _carLogic = carLogic;
         }
 
         // GET: Cars
         public ActionResult Index()
         {
+            if (_carLogic.IsUserAuthorized())
+            {
+                return View("Index", _carRepository.GetWhere(x => x.Id > 0));
+            }
             
-            return View(_carRepository.GetWhere(x=>x.Id>0));
+            return View("~/Views/Cars/IndexUnAuthorized.cshtml", _carRepository.GetWhere(x => x.Id > 0));
         }
 
         // GET: Cars/Details/5
@@ -55,16 +61,14 @@ namespace CarShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( Car car)
+        public ActionResult Create(Car car)
         {
-            car.DateCreate = DateTime.Now;
-            car.Modificationdate = car.DateCreate;
-            car.IsActive = true;
-            car.RecordModificationAuthor = car.RecordAuthor;
+
             if (ModelState.IsValid)
             {
+                _carLogic.FullfillProperties(car);
                 _carRepository.Create(car);
-                
+
                 return RedirectToAction("Index");
             }
 
@@ -91,7 +95,7 @@ namespace CarShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( Car car)
+        public ActionResult Edit(Car car)
         {
             if (ModelState.IsValid)
             {
@@ -104,6 +108,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -129,6 +134,6 @@ namespace CarShop.Controllers
             return RedirectToAction("Index");
         }
 
-       
+
     }
 }

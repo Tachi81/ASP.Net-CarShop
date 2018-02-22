@@ -1,3 +1,4 @@
+using CarShop.BusinessLogic;
 using CarShop.Interfaces;
 using CarShop.Repository;
 
@@ -65,6 +66,7 @@ namespace CarShop.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<ICarRepository>().To<CarRepository>();
+            kernel.Bind<ICarLogic>().To<CarLogic>();
         }        
     }
 }
