@@ -25,6 +25,9 @@ namespace CarShop.Controllers
             _emailService = emailService;
         }
 
+
+
+
         // GET: Cars
         public ActionResult Index()
         {
@@ -36,7 +39,12 @@ namespace CarShop.Controllers
             return View("~/Views/Cars/IndexUnAuthorized.cshtml", _carRepository.GetWhere(x => x.Id > 0).Where(x => x.IsActive));
         }
 
+
+
+
+
         // GET: Cars/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -51,6 +59,9 @@ namespace CarShop.Controllers
             }
             return View(car);
         }
+
+
+
 
         // GET: Cars/Create
         public ActionResult Create()
@@ -79,7 +90,10 @@ namespace CarShop.Controllers
             return View(car);
         }
 
+
+
         // GET: Cars/Edit/5
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -109,6 +123,8 @@ namespace CarShop.Controllers
             }
             return View(car);
         }
+
+
 
         // GET: Cars/Delete/5
         [Authorize]
