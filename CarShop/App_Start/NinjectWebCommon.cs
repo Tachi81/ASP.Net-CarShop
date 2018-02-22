@@ -9,7 +9,7 @@ namespace CarShop.App_Start
 {
     using System;
     using System.Web;
-
+    using CarShop.Service;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
@@ -67,6 +67,7 @@ namespace CarShop.App_Start
         {
             kernel.Bind<ICarRepository>().To<CarRepository>();
             kernel.Bind<ICarLogic>().To<CarLogic>();
+            kernel.Bind<IEmailService>().To<EmailService>();
         }        
     }
 }

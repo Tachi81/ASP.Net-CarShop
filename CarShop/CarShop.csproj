@@ -213,6 +213,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Car.cs" />
+    <Compile Include="Interfaces\IBasicEntity.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -220,6 +221,8 @@
     <Compile Include="Repository\CarRepository.cs" />
     <Compile Include="Interfaces\IAbstractRepository.cs" />
     <Compile Include="Interfaces\ICarRepository.cs" />
+    <Compile Include="Service\EmailService.cs" />
+    <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

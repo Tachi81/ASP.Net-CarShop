@@ -16,11 +16,13 @@ namespace CarShop.Controllers
     {
         private readonly ICarRepository _carRepository;
         private readonly ICarLogic _carLogic;
+        private readonly IEmailService _emailService;
 
-        public CarsController(ICarRepository carRepository, ICarLogic carLogic)
+        public CarsController(ICarRepository carRepository, ICarLogic carLogic, IEmailService emailService)
         {
             _carRepository = carRepository;
             _carLogic = carLogic;
+            _emailService = emailService;
         }
 
         // GET: Cars
@@ -31,7 +33,7 @@ namespace CarShop.Controllers
                 return View("Index", _carRepository.GetWhere(x => x.Id > 0));
             }
             
-            return View("~/Views/Cars/IndexUnAuthorized.cshtml", _carRepository.GetWhere(x => x.Id > 0));
+            return View("~/Views/Cars/IndexUnAuthorized.cshtml", _carRepository.GetWhere(x => x.Id > 0).Where(x => x.IsActive));
         }
 
         // GET: Cars/Details/5
@@ -66,8 +68,10 @@ namespace CarShop.Controllers
 
             if (ModelState.IsValid)
             {
-                _carLogic.FullfillProperties(car);
+               
                 _carRepository.Create(car);
+                var message = _emailService.CreateMailMessage(car);
+                _emailService.SendEmail(message);
 
                 return RedirectToAction("Index");
             }
@@ -99,8 +103,7 @@ namespace CarShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                car.Modificationdate = DateTime.Now;
-                _carRepository.Update(car);
+               _carRepository.Update(car);
 
                 return RedirectToAction("Index");
             }
@@ -129,7 +132,7 @@ namespace CarShop.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Car car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
-            car.IsActive = false;
+            
             _carRepository.Delete(car);
             return RedirectToAction("Index");
         }
