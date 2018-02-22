@@ -71,6 +71,11 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.DateCreate)
+        @Html.HiddenFor(model => model.IsActive)
+        @Html.HiddenFor(model => model.RecordAuthor)
+        @Html.HiddenFor(model => model.Modificationdate)
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
