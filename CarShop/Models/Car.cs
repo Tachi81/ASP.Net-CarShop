@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CarShop.Interfaces;
 
 namespace CarShop.Models
 {
-    public class Car
+    public class Car : IBasicEntity
     {
         public int Id { get; set; }
         public string Brand { get; set; }
