@@ -15,6 +15,16 @@ namespace CarShop.Repository
         {
             using (var context = new ApplicationDbContext())
             {
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    entity.RecordAuthor = HttpContext.Current.User.Identity.Name;
+                }
+                else
+                {
+                    entity.RecordAuthor = "Unauthorized person";
+                }
+
+                entity.RecordModificationAuthor = entity.RecordAuthor;
                 entity.DateCreate = DateTime.Now;
                 entity.Modificationdate = entity.DateCreate;
                 entity.IsActive = true;
