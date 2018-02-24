@@ -7,6 +7,6 @@ namespace CarShop.ViewModels
     {
         public Car Car { get; set; }
         public List<Car> CarList { get; set; }
-        public bool ShowButton { get; set; }
+        public bool IsUserAuthorized { get; set; }
     }
 }

@@ -20,21 +20,25 @@
         <th>
             @Html.DisplayNameFor(model => model.Car.RegistryNumber)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Car.IsActive)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Car.DateCreate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Car.Modificationdate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Car.RecordAuthor)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Car.RecordModificationAuthor)
-        </th>
+          @if (Model.IsUserAuthorized)
+          {
+              <th>
+                  @Html.DisplayNameFor(model => model.Car.IsActive)
+              </th>
+              <th>
+                  @Html.DisplayNameFor(model => model.Car.DateCreate)
+              </th>
+              <th>
+                  @Html.DisplayNameFor(model => model.Car.Modificationdate)
+              </th>
+              <th>
+                  @Html.DisplayNameFor(model => model.Car.RecordAuthor)
+              </th>
+              <th>
+                  @Html.DisplayNameFor(model => model.Car.RecordModificationAuthor)
+              </th>
+          }
+        
         <th></th>
     </tr>
 
@@ -49,21 +53,25 @@
         <td>
             @Html.DisplayFor(modelItem => item.RegistryNumber)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActive)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateCreate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Modificationdate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecordAuthor)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecordModificationAuthor)
-        </td>
+        @if (Model.IsUserAuthorized)
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modificationdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordAuthor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordModificationAuthor)
+            </td>
+        }
+       
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Details", "Details", new { id = item.Id }) |

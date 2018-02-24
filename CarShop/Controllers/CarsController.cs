@@ -25,7 +25,7 @@ namespace CarShop.Controllers
         {
             var carVM = new CarViewModel()
             {
-                ShowButton = HttpContext.User.Identity.IsAuthenticated
+                IsUserAuthorized = HttpContext.User.Identity.IsAuthenticated
             };
             if (_carLogic.IsUserAuthorized())
             {
