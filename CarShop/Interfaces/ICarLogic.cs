@@ -1,6 +1,4 @@
-﻿using CarShop.Models;
-
-namespace CarShop.Interfaces
+﻿namespace CarShop.Interfaces
 {
     public interface ICarLogic
     {
