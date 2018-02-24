@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CarShop.Interfaces;
 using CarShop.Models;
+using CarShop.ViewModels;
 using static System.Net.WebRequestMethods;
 
 namespace CarShop.Controllers
@@ -16,27 +17,33 @@ namespace CarShop.Controllers
     {
         private readonly ICarRepository _carRepository;
         private readonly ICarLogic _carLogic;
-        private readonly IEmailService _emailService;
+       
 
-        public CarsController(ICarRepository carRepository, ICarLogic carLogic, IEmailService emailService)
+        public CarsController(ICarRepository carRepository, ICarLogic carLogic)
         {
             _carRepository = carRepository;
             _carLogic = carLogic;
-            _emailService = emailService;
+           
         }
-
-
 
 
         // GET: Cars
         public ActionResult Index()
         {
+            var carVM = new CarViewModel()
+            {
+                ShowButton = HttpContext.User.Identity.IsAuthenticated
+            };
             if (_carLogic.IsUserAuthorized())
             {
-                return View("Index", _carRepository.GetWhere(x => x.Id > 0));
+                carVM.CarList = _carRepository.GetWhere(x => x.Id > 0);
             }
-            
-            return View("~/Views/Cars/IndexUnAuthorized.cshtml", _carRepository.GetWhere(x => x.Id > 0).Where(x => x.IsActive));
+            else
+            {
+                carVM.CarList = _carRepository.GetWhere(x => x.Id > 0 && x.IsActive);
+            }
+            return View("Index", carVM);
+
         }
 
 
@@ -52,12 +59,15 @@ namespace CarShop.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Car car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
-            if (car == null)
+            var carVM = new CarViewModel
+            {
+                Car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault()
+            };
+            if (carVM.Car == null)
             {
                 return HttpNotFound();
             }
-            return View(car);
+            return View(carVM);
         }
 
 
@@ -74,15 +84,13 @@ namespace CarShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Car car)
+        public ActionResult Create(CarViewModel car)
         {
 
             if (ModelState.IsValid)
             {
-               
-                _carRepository.Create(car);
-                var message = _emailService.CreateMailMessage(car);
-                _emailService.SendEmail(message);
+
+                _carRepository.Create(car.Car);
 
                 return RedirectToAction("Index");
             }
@@ -100,12 +108,15 @@ namespace CarShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
-            if (car == null)
+            var carVM = new CarViewModel
+            {
+                Car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault()
+            };
+            if (carVM.Car == null)
             {
                 return HttpNotFound();
             }
-            return View(car);
+            return View(carVM);
         }
 
         // POST: Cars/Edit/5
@@ -113,11 +124,11 @@ namespace CarShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Car car)
+        public ActionResult Edit(CarViewModel car)
         {
             if (ModelState.IsValid)
             {
-               _carRepository.Update(car);
+                _carRepository.Update(car.Car);
 
                 return RedirectToAction("Index");
             }
@@ -134,12 +145,16 @@ namespace CarShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Car car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
-            if (car == null)
+
+            var carVM = new CarViewModel
+            {
+                Car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault()
+            };
+            if (carVM.Car == null)
             {
                 return HttpNotFound();
             }
-            return View(car);
+            return View(carVM);
         }
 
         // POST: Cars/Delete/5
@@ -147,9 +162,10 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Car car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
-            
-            _carRepository.Delete(car);
+            var carVM = new CarViewModel();
+             carVM.Car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
+
+            _carRepository.Delete(carVM.Car);
             return RedirectToAction("Index");
         }
 

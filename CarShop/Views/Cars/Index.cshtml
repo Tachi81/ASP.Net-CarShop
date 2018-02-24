@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CarShop.Models.Car>
+﻿@model CarShop.ViewModels.CarViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -12,33 +12,33 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Brand)
+            @Html.DisplayNameFor(model => model.Car.Brand)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Model)
+            @Html.DisplayNameFor(model => model.Car.Model)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RegistryNumber)
+            @Html.DisplayNameFor(model => model.Car.RegistryNumber)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsActive)
+            @Html.DisplayNameFor(model => model.Car.IsActive)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateCreate)
+            @Html.DisplayNameFor(model => model.Car.DateCreate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Modificationdate)
+            @Html.DisplayNameFor(model => model.Car.Modificationdate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RecordAuthor)
+            @Html.DisplayNameFor(model => model.Car.RecordAuthor)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RecordModificationAuthor)
+            @Html.DisplayNameFor(model => model.Car.RecordModificationAuthor)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.CarList) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Brand)
