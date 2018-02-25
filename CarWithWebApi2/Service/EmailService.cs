@@ -33,8 +33,8 @@ namespace CarShop.Service
             {
                 Sender = new MailAddress(_login),
                 From = new MailAddress(_login),
+                Subject = mail.Subject,
                 To = { mail.To},
-                Subject = "Unauthorized person added car ",
                 Body = "Unauthorized person added car",
                 IsBodyHtml = true
             };

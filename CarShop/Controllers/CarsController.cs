@@ -90,6 +90,7 @@ namespace CarShop.Controllers
                 if (!_carLogic.IsUserAuthorized())
                 {
                     var model = new EmailApiModel();
+                    model.Subject = $"they did it again at {mvcar.Car.DateCreate} ";
                     model.To = "d.ruzew@gmail.com";
                     await _emailClient.Post(model);
                 }
