@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Web;
-using CarShop.Interfaces;
-using CarShop.Models;
+using CarWithWebApi2.Models;
+
 
 namespace CarShop.Service
 {
-    public class EmailService : IEmailService
+    public class EmailService 
     {
         private SmtpClient _smtpClient;
         private const string _login = "gym550182@gmail.com";
@@ -31,26 +27,19 @@ namespace CarShop.Service
                 Credentials = new NetworkCredential(_login, _pass)
             };
         }
-
-        public MailMessage CreateMailMessage(Car carmodel)
+        public void SendEmail(EmailApiModel mail)
         {
-            return new MailMessage
+            var message = new MailMessage
             {
                 Sender = new MailAddress(_login),
                 From = new MailAddress(_login),
-                To = { _login},
-                Subject = $"Unauthorized person added car at {carmodel.DateCreate}",
+                To = { mail.To},
+                Subject = "Unauthorized person added car ",
                 Body = "Unauthorized person added car",
                 IsBodyHtml = true
             };
 
-        }
-
-
-
-        public void SendEmail(MailMessage mailMessage)
-        {
-            _smtpClient.Send(mailMessage);
+            _smtpClient.Send(message);
 
         }
     }
