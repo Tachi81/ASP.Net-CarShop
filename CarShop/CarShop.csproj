@@ -218,6 +218,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API_Consumer\ClientAbstract.cs" />
+    <Compile Include="API_Consumer\EmailClient.cs" />
+    <Compile Include="API_Consumer\Interfaces\IClientAbstract.cs" />
+    <Compile Include="API_Consumer\Interfaces\IEmailClient.cs" />
+    <Compile Include="API_Consumer\Models\EmailApiModel.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />

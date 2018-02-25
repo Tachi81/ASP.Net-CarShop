@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using CarShop.API_Consumer.Interfaces;
+using CarShop.API_Consumer.Models;
 using CarShop.Interfaces;
 using CarShop.ViewModels;
 
@@ -10,13 +13,14 @@ namespace CarShop.Controllers
     {
         private readonly ICarRepository _carRepository;
         private readonly ICarLogic _carLogic;
+        private readonly IEmailClient _emailClient;
        
 
-        public CarsController(ICarRepository carRepository, ICarLogic carLogic)
+        public CarsController(ICarRepository carRepository, ICarLogic carLogic, IEmailClient emailClient)
         {
             _carRepository = carRepository;
             _carLogic = carLogic;
-           
+            _emailClient = emailClient;
         }
 
 
@@ -77,18 +81,25 @@ namespace CarShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CarViewModel car)
+        public async Task<ActionResult> Create(CarViewModel mvcar)
         {
 
             if (ModelState.IsValid)
             {
-
-                _carRepository.Create(car.Car);
+                _carRepository.Create(mvcar.Car);
+                if (!_carLogic.IsUserAuthorized())
+                {
+                    var model = new EmailApiModel();
+                    model.To = "d.ruzew@gmail.com";
+                    await _emailClient.Post(model);
+                }
+               
+                    
 
                 return RedirectToAction("Index");
             }
 
-            return View(car);
+            return View(mvcar);
         }
 
 
@@ -155,8 +166,10 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var carVM = new CarViewModel();
-             carVM.Car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault();
+            var carVM = new CarViewModel
+            {
+                Car = _carRepository.GetWhere(x => x.Id == id).FirstOrDefault()
+            };
 
             _carRepository.Delete(carVM.Car);
             return RedirectToAction("Index");
